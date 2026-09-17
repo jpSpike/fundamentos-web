@@ -94,8 +94,16 @@ ul#lista-produtos li {
     background-color: #f4f4f7;
     border-radius: 4px;
     font-size: 14px;
+    
 }
 
+.botaoRemover {
+    background-color: #dc3545;
+}
+
+.botaoRemover:hover {
+    background-color: #bd2130;
+}
 .rodape{
     background-color: #1c223a; /*#171C2B*/
     color: #fff;
@@ -139,7 +147,6 @@ ul#lista-produtos li {
 
 .rodape-contato{
     text-align: right;
-    flex-direction: column;
 }
 
 
