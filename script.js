@@ -13,27 +13,30 @@ formProduto.addEventListener("submit", function (event) {
 
     // Adicionar produto à lista
     const item = document.createElement("li");
-    
+
     // Adiciona as informações do produto
     item.textContent = `${nome} - R$ ${Number(preco).toFixed(2)} - (${quantidade} un.) - ${marca} - ${cor}     `;
-    
+
+    // Adiciona um nome item no final da lista
+    listaProdutos.appendChild(item);
+
+    // Criar Botão Editar
+    const botaoEditar = document.createElement("button");
+    botaoEditar.classList.add("botaoEditar")
+    botaoEditar.textContent = "🛠️";
+    botaoEditar.addEventListener("click", function () { // Detectar o clique do botão editar
+        item.edit();
+    })
+
     // Criar botão remover
     const botaoRemover = document.createElement("button");
     botaoRemover.classList.add("botaoRemover")
-    
-    botaoRemover.textContent = "🗑";
-
-    // Dectar o clique no botão
-    botaoRemover.addEventListener("click", function() {
+    botaoRemover.textContent = "🗑️";
+    botaoRemover.addEventListener("click", function () { // Dectar o clique no botão
         item.remove();
     });
+    item.appendChild(botaoRemover); // Adciona o botão dentro do item
 
-    // Adciona o botão dentro do item
-    item.appendChild(botaoRemover);
-    
-    // Adiciona um nome item no final da lista
-    listaProdutos.appendChild(item);
-    
     // Limpa o formulario para o próximo cadastro
     formProduto.reset()
 });

@@ -94,21 +94,32 @@ ul#lista-produtos li {
     background-color: #f4f4f7;
     border-radius: 4px;
     font-size: 14px;
-    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+}
+
+.botaoEditar {
+    background-color: cornflowerblue;
 }
 
 .botaoRemover {
     background-color: #dc3545;
+
 }
 
 .botaoRemover:hover {
     background-color: #bd2130;
 }
-.rodape{
-    background-color: #1c223a; /*#171C2B*/
+
+.rodape {
+    background-color: #1c223a;
+    /*#171C2B*/
     color: #fff;
     margin-top: 40px;
-    padding: 30px;   
+    padding: 30px;
 }
 
 .rodape-corpo {
@@ -145,7 +156,7 @@ ul#lista-produtos li {
     font-size: 14px;
 }
 
-.rodape-contato{
+.rodape-contato {
     text-align: right;
 }
 
@@ -153,11 +164,11 @@ ul#lista-produtos li {
 .rodape-final {
     border-top: 1px solid#444;
     text-align: center;
-    padding:15px;
+    padding: 15px;
 }
 
 .rodape-final p {
-    margin:  0;
+    margin: 0;
     font-size: 13px;
-    color:#bbb;
+    color: #bbb;
 }
