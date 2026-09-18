@@ -22,14 +22,23 @@ formProduto.addEventListener("submit", function (event) {
 
     // Criar Botão Editar
     const botaoEditar = document.createElement("button");
+
     botaoEditar.classList.add("botaoEditar")
     botaoEditar.textContent = "🛠️";
     botaoEditar.addEventListener("click", function () { // Detectar o clique do botão editar
-        item.edit();
+        formProduto.querySelector("#nome").value = nome;
+        formProduto.querySelector("#preco").value = preco;
+        formProduto.querySelector("#quantidade").value = quantidade;
+        formProduto.querySelector("#marca").value = marca;
+        formProduto.querySelector("#cor").value = cor;
+
+        item.remove()
     })
+    item.appendChild(botaoEditar);
 
     // Criar botão remover
     const botaoRemover = document.createElement("button");
+    
     botaoRemover.classList.add("botaoRemover")
     botaoRemover.textContent = "🗑️";
     botaoRemover.addEventListener("click", function () { // Dectar o clique no botão
