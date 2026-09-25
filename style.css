@@ -105,6 +105,17 @@ ul#lista-produtos li {
     background-color: cornflowerblue;
 }
 
+.area-botoes {
+    display: flex;
+    gap: 8px;
+}
+
+.area-botoes button {
+    margin-top: 0;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
 .botaoEditar:hover {
     background-color: rgb(63, 101, 172);
 }

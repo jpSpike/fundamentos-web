@@ -1,10 +1,27 @@
 const formProduto = document.querySelector("#form-produto");
 const listaProdutos = document.querySelector("#lista-produtos");
 
+function atualizarContador() {
+    const contador = document.querySelector("#contador")
+    const quantidadeProdutos = listaProdutos.children.length;
+
+    if (quantidadeProdutos === 0) {
+        contador.textContent = "Nenhum produto cadastrado ainda!";
+    } else {
+        contador.textContent = `${quantidadeProdutos} Produtos cadastrados`;
+    }
+}
+
+atualizarContador();
+
 // Função para adicionar os botões a qualquer item <li>
 function adicionarBotoes(item) {
     // Evita adicionar botões duplicados se a função for chamada mais de uma vez
-    if (item.querySelector(".botaoEditar")) return;
+    if (item.querySelector(".area-botoes")) return;
+
+    // Container que vai agrupar os dois botões
+    const areaBotoes = document.createElement("div");
+    areaBotoes.classList.add("area-botoes")
 
     // Botão Editar
     const botaoEditar = document.createElement("button");
@@ -20,6 +37,7 @@ function adicionarBotoes(item) {
         formProduto.querySelector("#cor").value = item.dataset.cor || "";
 
         item.remove();
+        atualizarContador();
     });
 
     // Botão Remover
@@ -29,19 +47,18 @@ function adicionarBotoes(item) {
 
     botaoRemover.addEventListener("click", function () {
         item.remove();
+        atualizarContador();
     });
 
-    item.appendChild(botaoEditar);
-    item.appendChild(botaoRemover);
+    // Os botões vão dentro da div, e a div vai dentro do item
+    areaBotoes.appendChild(botaoEditar);
+    areaBotoes.appendChild(botaoRemover);
+    item.appendChild(areaBotoes)
 }
 
-// 1. Aplica os botões aos itens estáticos que já vieram no HTML
-const itensIniciais = listaProdutos.querySelectorAll("li");
-itensIniciais.forEach(function (item) {
-    adicionarBotoes(item);
-});
 
-// 2. Manipula o envio do formulário para novos produtos
+
+// 1. Manipula o envio do formulário para novos produtos
 formProduto.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -50,7 +67,6 @@ formProduto.addEventListener("submit", function (event) {
     const quantidade = formProduto.querySelector("#quantidade").value;
     const marca = formProduto.querySelector("#marca").value;
     const cor = formProduto.querySelector("#cor").value;
-
     const item = document.createElement("li");
 
     // Guarda os dados no dataset do novo item
@@ -64,7 +80,10 @@ formProduto.addEventListener("submit", function (event) {
 
     // Adiciona os botões usando a mesma função
     adicionarBotoes(item);
-
+    
     listaProdutos.appendChild(item);
     formProduto.reset();
+    
+    atualizarContador();
+
 });
