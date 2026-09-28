@@ -1,89 +1,145 @@
 const formProduto = document.querySelector("#form-produto");
 const listaProdutos = document.querySelector("#lista-produtos");
+const botaoForm = document.querySelector("#botao-form");
+const tituloForm = document.querySelector("#titulo-form");
+const contador = document.querySelector("#contador");
+const mensagemVazia = document.querySelector("#mensagem-vazia");
+const mensagemErro = document.querySelector("#mensagem-erro");
 
+let itemEmEdicao = null;
+
+// Bônus 1 e 2: contador + mensagem de lista vazia
 function atualizarContador() {
-    const contador = document.querySelector("#contador")
     const quantidadeProdutos = listaProdutos.children.length;
 
-    if (quantidadeProdutos === 0) {
-        contador.textContent = "Nenhum produto cadastrado ainda!";
-    } else {
-        contador.textContent = `${quantidadeProdutos} Produtos cadastrados`;
-    }
+    contador.textContent = `Produtos cadastrados: ${quantidadeProdutos}`;
+
+    // Mostra a mensagem só quando a lista está vazia
+    mensagemVazia.hidden = quantidadeProdutos > 0;
 }
 
 atualizarContador();
 
-// Função para adicionar os botões a qualquer item <li>
-function adicionarBotoes(item) {
-    // Evita adicionar botões duplicados se a função for chamada mais de uma vez
-    if (item.querySelector(".area-botoes")) return;
-
-    // Container que vai agrupar os dois botões
-    const areaBotoes = document.createElement("div");
-    areaBotoes.classList.add("area-botoes")
-
-    // Botão Editar
-    const botaoEditar = document.createElement("button");
-    botaoEditar.classList.add("botaoEditar");
-    botaoEditar.textContent = "🛠️";
-
-    botaoEditar.addEventListener("click", function () {
-        // Lê os dados armazenados nos dataset do <li>
-        formProduto.querySelector("#nome").value = item.dataset.nome || "";
-        formProduto.querySelector("#preco").value = item.dataset.preco || "";
-        formProduto.querySelector("#quantidade").value = item.dataset.quantidade || "";
-        formProduto.querySelector("#marca").value = item.dataset.marca || "";
-        formProduto.querySelector("#cor").value = item.dataset.cor || "";
-
-        item.remove();
-        atualizarContador();
-    });
-
-    // Botão Remover
-    const botaoRemover = document.createElement("button");
-    botaoRemover.classList.add("botaoRemover");
-    botaoRemover.textContent = "🗑️";
-
-    botaoRemover.addEventListener("click", function () {
-        item.remove();
-        atualizarContador();
-    });
-
-    // Os botões vão dentro da div, e a div vai dentro do item
-    areaBotoes.appendChild(botaoEditar);
-    areaBotoes.appendChild(botaoRemover);
-    item.appendChild(areaBotoes)
+// Bônus 3: mensagens de erro
+function mostrarErro(texto) {
+    mensagemErro.textContent = texto;
 }
 
+function limparErro() {
+    mensagemErro.textContent = "";
+}
 
+// Some com o erro assim que o usuário mexer na quantidade
+formProduto.querySelector("#quantidade").addEventListener("input", limparErro);
 
-// 1. Manipula o envio do formulário para novos produtos
+function preencherItem(item, dados) {
+    item.dataset.nome = dados.nome;
+    item.dataset.preco = dados.preco;
+    item.dataset.quantidade = dados.quantidade;
+    item.dataset.marca = dados.marca;
+    item.dataset.cor = dados.cor;
+
+    let texto = item.querySelector(".texto-produto");
+    if (!texto) {
+        texto = document.createElement("span");
+        texto.classList.add("texto-produto");
+        item.prepend(texto);
+    }
+
+    const precoFormatado = Number(dados.preco).toFixed(2).replace(".", ",");
+    texto.textContent = `${dados.nome} - R$ ${precoFormatado} (${dados.quantidade} un.) - ${dados.marca} - ${dados.cor}`;
+}
+
+function sairModoEdicao() {
+    if (itemEmEdicao) {
+        itemEmEdicao.classList.remove("em-edicao");
+    }
+    itemEmEdicao = null;
+    botaoForm.textContent = "Adicionar produto";
+    tituloForm.textContent = "Novo produto";
+    formProduto.reset();
+    limparErro();
+}
+
+function adicionarBotoes(item) {
+    if (item.querySelector(".area-botoes")) return;
+
+    const areaBotoes = document.createElement("div");
+    areaBotoes.classList.add("area-botoes");
+
+    const botaoEditar = document.createElement("button");
+    botaoEditar.type = "button";
+    botaoEditar.classList.add("botaoEditar");
+    botaoEditar.textContent = "Editar";
+
+    botaoEditar.addEventListener("click", function () {
+        if (itemEmEdicao) {
+            itemEmEdicao.classList.remove("em-edicao");
+        }
+
+        itemEmEdicao = item;
+        item.classList.add("em-edicao");
+        limparErro();
+
+        formProduto.querySelector("#nome").value = item.dataset.nome;
+        formProduto.querySelector("#preco").value = item.dataset.preco;
+        formProduto.querySelector("#quantidade").value = item.dataset.quantidade;
+        formProduto.querySelector("#marca").value = item.dataset.marca;
+        formProduto.querySelector("#cor").value = item.dataset.cor;
+
+        botaoForm.textContent = "Salvar alterações";
+        tituloForm.textContent = "Editar produto";
+        formProduto.querySelector("#nome").focus();
+    });
+
+    const botaoRemover = document.createElement("button");
+    botaoRemover.type = "button";
+    botaoRemover.classList.add("botaoRemover");
+    botaoRemover.textContent = "Remover";
+
+    botaoRemover.addEventListener("click", function () {
+        if (item === itemEmEdicao) {
+            sairModoEdicao();
+        }
+        item.remove();
+        atualizarContador();
+    });
+
+    areaBotoes.appendChild(botaoEditar);
+    areaBotoes.appendChild(botaoRemover);
+    item.appendChild(areaBotoes);
+}
+
 formProduto.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const nome = formProduto.querySelector("#nome").value;
-    const preco = formProduto.querySelector("#preco").value;
-    const quantidade = formProduto.querySelector("#quantidade").value;
-    const marca = formProduto.querySelector("#marca").value;
-    const cor = formProduto.querySelector("#cor").value;
-    const item = document.createElement("li");
+    const dados = {
+        nome: formProduto.querySelector("#nome").value,
+        preco: formProduto.querySelector("#preco").value,
+        quantidade: formProduto.querySelector("#quantidade").value,
+        marca: formProduto.querySelector("#marca").value,
+        cor: formProduto.querySelector("#cor").value
+    };
 
-    // Guarda os dados no dataset do novo item
-    item.dataset.nome = nome;
-    item.dataset.preco = preco;
-    item.dataset.quantidade = quantidade;
-    item.dataset.marca = marca;
-    item.dataset.cor = cor;
+    // Bônus 3: validação da quantidade
+    if (Number(dados.quantidade) <= 0) {
+        mostrarErro("A quantidade deve ser maior que zero.");
+        formProduto.querySelector("#quantidade").focus();
+        return; // interrompe: nada é cadastrado nem alterado
+    }
 
-    item.textContent = `${nome} - R$ ${Number(preco).toFixed(2)} (${quantidade} un.) - ${marca} - ${cor} `;
+    limparErro();
 
-    // Adiciona os botões usando a mesma função
-    adicionarBotoes(item);
-    
-    listaProdutos.appendChild(item);
-    formProduto.reset();
-    
+    if (itemEmEdicao) {
+        preencherItem(itemEmEdicao, dados);
+        sairModoEdicao();
+    } else {
+        const item = document.createElement("li");
+        preencherItem(item, dados);
+        adicionarBotoes(item);
+        listaProdutos.appendChild(item);
+        formProduto.reset();
+    }
+
     atualizarContador();
-
 });
