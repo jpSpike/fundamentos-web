@@ -6,21 +6,20 @@ const contador = document.querySelector("#contador");
 const mensagemVazia = document.querySelector("#mensagem-vazia");
 const mensagemErro = document.querySelector("#mensagem-erro");
 
+// Guarda qual <li> está sendo editado (null = modo "adicionar")
 let itemEmEdicao = null;
 
-// Bônus 1 e 2: contador + mensagem de lista vazia
+// ---------- Contador e lista vazia ----------
 function atualizarContador() {
     const quantidadeProdutos = listaProdutos.children.length;
 
     contador.textContent = `Produtos cadastrados: ${quantidadeProdutos}`;
-
-    // Mostra a mensagem só quando a lista está vazia
     mensagemVazia.hidden = quantidadeProdutos > 0;
 }
 
 atualizarContador();
 
-// Bônus 3: mensagens de erro
+// ---------- Mensagens de erro ----------
 function mostrarErro(texto) {
     mensagemErro.textContent = texto;
 }
@@ -32,6 +31,7 @@ function limparErro() {
 // Some com o erro assim que o usuário mexer na quantidade
 formProduto.querySelector("#quantidade").addEventListener("input", limparErro);
 
+// ---------- Item da lista ----------
 function preencherItem(item, dados) {
     item.dataset.nome = dados.nome;
     item.dataset.preco = dados.preco;
@@ -50,6 +50,7 @@ function preencherItem(item, dados) {
     texto.textContent = `${dados.nome} - R$ ${precoFormatado} (${dados.quantidade} un.) - ${dados.marca} - ${dados.cor}`;
 }
 
+// Volta o formulário ao estado normal
 function sairModoEdicao() {
     if (itemEmEdicao) {
         itemEmEdicao.classList.remove("em-edicao");
@@ -67,6 +68,7 @@ function adicionarBotoes(item) {
     const areaBotoes = document.createElement("div");
     areaBotoes.classList.add("area-botoes");
 
+    // Botão Editar
     const botaoEditar = document.createElement("button");
     botaoEditar.type = "button";
     botaoEditar.classList.add("botaoEditar");
@@ -92,6 +94,7 @@ function adicionarBotoes(item) {
         formProduto.querySelector("#nome").focus();
     });
 
+    // Botão Remover
     const botaoRemover = document.createElement("button");
     botaoRemover.type = "button";
     botaoRemover.classList.add("botaoRemover");
@@ -110,6 +113,7 @@ function adicionarBotoes(item) {
     item.appendChild(areaBotoes);
 }
 
+// ---------- Envio do formulário ----------
 formProduto.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -121,19 +125,21 @@ formProduto.addEventListener("submit", function (event) {
         cor: formProduto.querySelector("#cor").value
     };
 
-    // Bônus 3: validação da quantidade
+    // Validação: quantidade deve ser maior que zero
     if (Number(dados.quantidade) <= 0) {
         mostrarErro("A quantidade deve ser maior que zero.");
         formProduto.querySelector("#quantidade").focus();
-        return; // interrompe: nada é cadastrado nem alterado
+        return;
     }
 
     limparErro();
 
     if (itemEmEdicao) {
+        // Modo edição: atualiza o item existente, sem criar outro
         preencherItem(itemEmEdicao, dados);
         sairModoEdicao();
     } else {
+        // Modo adicionar: cria um item novo
         const item = document.createElement("li");
         preencherItem(item, dados);
         adicionarBotoes(item);
@@ -143,3 +149,36 @@ formProduto.addEventListener("submit", function (event) {
 
     atualizarContador();
 });
+
+// ---------- Frase aleatória ----------
+const frases = [
+    "Hoje é dia de comprar caneta!",
+    "Um caderno novo, uma vida nova.",
+    "Organize seu estoque, organize sua vida.",
+    "Papel aceita tudo, menos desorganização.",
+    "Lápis apontado, mente afiada.",
+    "Quem tem marca-texto, destaca o que importa.",
+    "Toda grande ideia começou num rascunho.",
+    "Borracha: porque errar faz parte."
+];
+
+const elementoFrase = document.querySelector("#frase-do-dia");
+const botaoSortear = document.querySelector("#botao-frase");
+
+let fraseAtual = "";
+
+function sortearFrase() {
+    let novaFrase;
+
+    // Sorteia até vir uma frase diferente da atual
+    do {
+        const indice = Math.floor(Math.random() * frases.length);
+        novaFrase = frases[indice];
+    } while (novaFrase === fraseAtual);
+
+    fraseAtual = novaFrase;
+    elementoFrase.textContent = novaFrase;
+}
+
+sortearFrase();
+botaoSortear.addEventListener("click", sortearFrase);

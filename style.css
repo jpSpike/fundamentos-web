@@ -26,6 +26,35 @@ header p {
     opacity: 0.85;
 }
 
+/* Frase aleatória */
+.frase-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.frase-do-dia {
+    margin: 0;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 1;
+}
+
+.frase-area button {
+    margin-top: 0;
+    padding: 4px 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-size: 16px;
+    transition: transform 0.3s;
+}
+
+.frase-area button:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+    transform: rotate(180deg);
+}
+
 /* ---------- Conteúdo principal ---------- */
 main {
     max-width: 480px;
