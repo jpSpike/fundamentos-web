@@ -150,7 +150,7 @@ formProduto.addEventListener("submit", function (event) {
     atualizarContador();
 });
 
-// ---------- Frase aleatória ----------
+// ---------- Frase aleatória -------
 const frases = [
     "Hoje é dia de comprar caneta!",
     "Um caderno novo, uma vida nova.",
@@ -182,3 +182,20 @@ function sortearFrase() {
 
 sortearFrase();
 botaoSortear.addEventListener("click", sortearFrase);
+
+
+const botaoTema = document.querySelector("#botao-tema");
+
+function aplicarTema(escuro) {
+    // Com o segundo argumento, o toggle liga (true) ou desliga (false) a classe
+    document.body.classList.toggle("escuro", escuro);
+    botaoTema.textContent = escuro ? "☀️" : "🌙";
+    localStorage.setItem("tema", escuro ? "escuro" : "claro");
+}
+
+aplicarTema(localStorage.getItem("tema") === "escuro");
+
+botaoTema.addEventListener("click", function () {
+    const estaEscuro = document.body.classList.contains("escuro");
+    aplicarTema(!estaEscuro);
+});

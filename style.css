@@ -7,14 +7,17 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f4f7;
     color: #222;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* ---------- Cabeçalho ---------- */
 header {
+    position: relative;
     background-color: #2f6f4f;
     color: white;
     padding: 24px 16px;
     text-align: center;
+    transition: background-color 0.3s;
 }
 
 header h1 {
@@ -24,6 +27,23 @@ header h1 {
 header p {
     margin: 0;
     opacity: 0.85;
+}
+
+/* Botão de tema (canto superior direito do cabeçalho) */
+.botao-tema {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    margin-top: 0;
+    padding: 6px 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-size: 18px;
+    transition: transform 0.3s, background-color 0.2s;
+}
+
+.botao-tema:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+    transform: rotate(20deg);
 }
 
 /* Frase aleatória */
@@ -70,6 +90,7 @@ main {
     border-radius: 8px;
     padding: 16px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s;
 }
 
 .cartao h2 {
@@ -266,4 +287,56 @@ ul#lista-produtos li.em-edicao {
     margin: 0;
     font-size: 13px;
     color: #bbb;
+}
+
+/* =========================================
+   TEMA ESCURO (ativado pela classe .escuro)
+   ========================================= */
+body.escuro {
+    background-color: #121417;
+    color: #e4e4e4;
+}
+
+body.escuro header {
+    background-color: #1f4d37;
+}
+
+body.escuro .cartao {
+    background-color: #1e2228;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+body.escuro input {
+    background-color: #2a2f37;
+    border-color: #444;
+    color: #e4e4e4;
+}
+
+body.escuro input::placeholder {
+    color: #888;
+}
+
+body.escuro .mensagem-vazia {
+    background-color: #2a2f37;
+    color: #aaa;
+}
+
+body.escuro ul#lista-produtos li {
+    background-color: #2a2f37;
+}
+
+body.escuro ul#lista-produtos li:hover {
+    background-color: #26382f;
+}
+
+body.escuro ul#lista-produtos li.em-edicao {
+    background-color: #22304d;
+}
+
+body.escuro .area-botoes {
+    border-left-color: #555;
+}
+
+body.escuro .rodape {
+    background-color: #0d1020;
 }
